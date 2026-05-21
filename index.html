@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>爬虫助手 · Scrapling Agent v3.2</title>
+<style>
+:root {
+  --bg: #07070d;
+  --bg2: #0d0d1a;
+  --surface: #12121f;
+  --surface-hover: #1a1a2e;
+  --border: #1e1e35;
+  --text: #e0e0f0;
+  --text-dim: #8080a0;
+  --text-muted: #5a5a7a;
+  --accent1: #ff6b35;
+  --accent1-glow: rgba(255,107,53,0.12);
+  --accent2: #00c9db;
+  --accent2-glow: rgba(0,201,219,0.10);
+  --accent3: #a78bfa;
+  --accent3-glow: rgba(167,139,250,0.08);
+  --green: #22c55e;
+  --yellow: #eab308;
+  --orange: #f97316;
+  --red: #ef4444;
+  --radius: 20px;
+  --radius-sm: 12px;
+  --radius-xs: 8px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+/* Nav */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: 56px; display: flex; align-items: center;
+  padding: 0 28px;
+  background: rgba(7,7,13,0.85); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-brand { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 13px; letter-spacing: 0.5px; }
+.nav-brand .brand-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.nav-brand .dot-orange { background: var(--accent1); }
+.nav-brand .dot-teal { background: var(--accent2); }
+.nav-links { display: flex; gap: 24px; list-style: none; font-size: 12px; margin-left: auto; }
+.nav-links a { color: var(--text-dim); text-decoration: none; transition: color 0.2s; letter-spacing: 0.3px; }
+.nav-links a:hover { color: var(--text); }
+
+/* Hero */
+.hero {
+  min-height: 100vh; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; text-align: center;
+  padding: 100px 24px 60px; position: relative; overflow: hidden;
+}
+.hero::before {
+  content: ''; position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 30% 50%, rgba(255,107,53,0.06), transparent 70%),
+    radial-gradient(ellipse 60% 50% at 70% 50%, rgba(0,201,219,0.06), transparent 70%);
+}
+.hero > * { position: relative; z-index: 1; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 18px;
+  background: rgba(255,107,53,0.08); border: 1px solid rgba(255,107,53,0.2);
+  border-radius: 100px; font-size: 12px; color: var(--accent1);
+  letter-spacing: 2px; margin-bottom: 28px;
+}
+.hero-badge .pulse-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+.hero h1 {
+  font-size: clamp(2.4rem, 6vw, 4.2rem);
+  font-weight: 800; line-height: 1.15; margin-bottom: 8px;
+  background: linear-gradient(135deg, #fff 30%, var(--accent1) 55%, var(--accent2) 80%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.hero-tagline {
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  color: var(--text-dim); max-width: 580px; margin: 16px auto 48px;
+}
+.hero-kpi { display: flex; gap: 40px; flex-wrap: wrap; justify-content: center; margin-bottom: 60px; }
+.hero-kpi-item { text-align: center; }
+.hero-kpi-item .num {
+  font-size: 2.4rem; font-weight: 800; line-height: 1;
+  background: linear-gradient(135deg, var(--accent1), var(--accent2));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.hero-kpi-item .label { font-size: 0.78rem; color: var(--text-muted); margin-top: 6px; letter-spacing: 0.3px; }
+.hero-card {
+  max-width: 500px; width: 100%;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 32px 28px;
+  text-align: left; transition: all 0.3s ease;
+}
+.hero-card:hover { transform: translateY(-3px); border-color: rgba(255,255,255,0.08); }
+.hero-card .card-icon { font-size: 28px; margin-bottom: 12px; }
+.hero-card .card-title { font-size: 1rem; font-weight: 700; margin-bottom: 4px; }
+.hero-card .card-sub { font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; }
+.scroll-hint {
+  position: absolute; bottom: 28px;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  color: var(--text-muted); font-size: 11px;
+  animation: float 2.5s ease-in-out infinite;
+}
+@keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
+
+/* Sections */
+.section { max-width: 1100px; margin: 0 auto; padding: 100px 24px; }
+.section-header { margin-bottom: 52px; text-align: center; }
+.section-tag {
+  display: inline-block; padding: 4px 16px;
+  background: rgba(255,107,53,0.08); border: 1px solid rgba(255,107,53,0.15);
+  border-radius: 100px; font-size: 11px; color: var(--accent1);
+  letter-spacing: 2px; margin-bottom: 14px;
+}
+.section-header h2 { font-size: clamp(1.6rem, 3.5vw, 2.4rem); font-weight: 700; margin-bottom: 10px; }
+.section-header p { color: var(--text-dim); max-width: 580px; margin: 0 auto; font-size: 0.9rem; }
+
+/* Cards */
+.card-grid { display: grid; gap: 16px; }
+.card-grid-2 { grid-template-columns: repeat(2, 1fr); }
+.card-grid-3 { grid-template-columns: repeat(3, 1fr); }
+.card-grid-4 { grid-template-columns: repeat(4, 1fr); }
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 28px;
+  transition: all 0.3s ease;
+}
+.card:hover { background: var(--surface-hover); transform: translateY(-2px); border-color: rgba(255,255,255,0.06); }
+.card-icon-lg { font-size: 32px; margin-bottom: 14px; }
+.card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
+.card .card-meta { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 10px; }
+.card p { font-size: 0.85rem; color: var(--text-dim); line-height: 1.6; }
+
+/* Feature Cards */
+.feature-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 40px; }
+.feature-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 32px 24px; position: relative;
+  overflow: hidden; transition: all 0.3s ease;
+}
+.feature-card:hover { transform: translateY(-3px); }
+.feature-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+.feature-card.l1::before { background: #6b7280; }
+.feature-card.l2::before { background: var(--accent2); }
+.feature-card.l3::before { background: var(--accent3); }
+.feature-card .fc-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11px; font-weight: 600; padding: 2px 10px;
+  border-radius: 100px; margin-bottom: 14px;
+}
+.feature-card.l1 .fc-badge { background: rgba(107,114,128,0.15); color: #9ca3af; }
+.feature-card.l2 .fc-badge { background: rgba(0,201,219,0.12); color: var(--accent2); }
+.feature-card.l3 .fc-badge { background: rgba(167,139,250,0.12); color: var(--accent3); }
+.feature-card .fc-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 4px; }
+.feature-card .fc-time { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 16px; }
+.feature-card ul { list-style: none; }
+.feature-card ul li {
+  font-size: 0.82rem; color: var(--text-dim); padding: 5px 0;
+  display: flex; align-items: flex-start; gap: 8px;
+}
+.feature-card ul li::before { content: '→'; color: var(--text-muted); flex-shrink: 0; }
+
+/* Mode Cards */
+.mode-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 700px; margin: 0 auto; }
+.mode-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 28px; text-align: center;
+  transition: all 0.3s ease;
+}
+.mode-card:hover { transform: translateY(-3px); }
+.mode-card .mode-icon { font-size: 40px; margin-bottom: 12px; }
+.mode-card .mode-name { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; }
+.mode-card .mode-tag {
+  display: inline-block; padding: 2px 12px; font-size: 11px;
+  border-radius: 100px; font-weight: 600; margin-bottom: 12px;
+}
+.mode-card.default .mode-tag { background: rgba(0,201,219,0.12); color: var(--accent2); border: 1px solid rgba(0,201,219,0.2); }
+.mode-card.auto .mode-tag { background: rgba(167,139,250,0.12); color: var(--accent3); border: 1px solid rgba(167,139,250,0.2); }
+.mode-card p { font-size: 0.82rem; color: var(--text-dim); line-height: 1.5; }
+
+/* Confidence */
+.confidence-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+.conf-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 20px;
+  text-align: center;
+}
+.conf-card .conf-label { font-size: 0.72rem; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 6px; }
+.conf-card .conf-value { font-size: 1rem; font-weight: 700; }
+.conf-card .conf-sub { font-size: 0.75rem; color: var(--text-dim); margin-top: 2px; }
+.conf-card .conf-bar {
+  height: 3px; border-radius: 2px; margin-top: 10px;
+  background: linear-gradient(90deg, var(--accent1), var(--accent2));
+  transition: width 1s ease;
+}
+
+/* Level Table */
+.level-table { width: 100%; border-collapse: collapse; font-size: 0.84rem; margin: 24px 0; }
+.level-table th {
+  text-align: left; padding: 12px 16px;
+  background: rgba(255,255,255,0.02); border-bottom: 2px solid var(--border);
+  font-weight: 600; color: var(--text-muted); font-size: 0.75rem; letter-spacing: 0.5px;
+}
+.level-table td { padding: 12px 16px; border-bottom: 1px solid var(--border); }
+.level-table tr:hover td { background: rgba(255,255,255,0.02); }
+.score-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; }
+.score-dot.s5 { background: #8b5cf6; }
+.score-dot.s4 { background: #22c55e; }
+.score-dot.s3 { background: #eab308; }
+.score-dot.s2 { background: #f97316; }
+.score-dot.s1 { background: #ef4444; }
+
+/* Scenario Table */
+.scenario-table { width: 100%; border-collapse: collapse; font-size: 0.84rem; margin: 24px 0; }
+.scenario-table th {
+  text-align: left; padding: 12px 16px;
+  background: rgba(255,255,255,0.02); border-bottom: 2px solid var(--border);
+  font-weight: 600; color: var(--text-muted); font-size: 0.75rem; letter-spacing: 0.5px;
+}
+.scenario-table td { padding: 12px 16px; border-bottom: 1px solid var(--border); }
+.scenario-table tr:hover td { background: rgba(255,255,255,0.02); }
+.skill-tag { display: inline-block; padding: 2px 10px; border-radius: 100px; font-size: 11px; font-weight: 600; }
+.skill-tag.orange { background: rgba(255,107,53,0.12); color: var(--accent1); }
+.skill-tag.teal { background: rgba(0,201,219,0.12); color: var(--accent2); }
+
+/* Install Section */
+.install-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.install-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 28px;
+  transition: all 0.3s;
+}
+.install-card:hover { background: var(--surface-hover); border-color: rgba(255,255,255,0.06); }
+.install-card .inst-icon { font-size: 28px; margin-bottom: 10px; }
+.install-card h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 4px; }
+.install-card .inst-desc { font-size: 0.82rem; color: var(--text-dim); margin-bottom: 12px; line-height: 1.5; }
+.install-card pre {
+  background: rgba(0,0,0,0.3); border: 1px solid rgba(42,42,74,0.4);
+  border-radius: 8px; padding: 14px;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 12px; overflow-x: auto; color: #a5b4fc; line-height: 1.6;
+}
+.install-card .cmd-comment { color: #64748b; }
+
+/* Callout */
+.callout {
+  background: rgba(0,201,219,0.06); border: 1px solid rgba(0,201,219,0.15);
+  border-left: 3px solid var(--accent2);
+  border-radius: var(--radius-xs); padding: 16px 20px; margin: 20px 0;
+  font-size: 0.85rem; color: var(--text-dim); line-height: 1.6;
+}
+.callout.orange { background: rgba(255,107,53,0.06); border-color: rgba(255,107,53,0.15); border-left-color: var(--accent1); }
+.callout.purple { background: rgba(167,139,250,0.06); border-color: rgba(167,139,250,0.15); border-left-color: var(--accent3); }
+.callout strong { color: var(--text); }
+
+/* Footer */
+.footer {
+  text-align: center; padding: 48px 24px;
+  border-top: 1px solid var(--border); color: var(--text-muted);
+  font-size: 0.78rem;
+}
+.footer-links { display: flex; gap: 20px; justify-content: center; margin-bottom: 12px; }
+.footer-links a { color: var(--text-dim); text-decoration: none; font-size: 0.78rem; }
+.footer-links a:hover { color: var(--text); }
+
+/* Animations */
+.fade-in { opacity: 0; transform: translateY(30px); transition: all 0.6s ease; }
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .feature-row { grid-template-columns: 1fr; }
+  .card-grid-2, .card-grid-3, .card-grid-4 { grid-template-columns: 1fr; }
+  .mode-compare { grid-template-columns: 1fr; }
+  .confidence-grid { grid-template-columns: 1fr; }
+  .install-grid { grid-template-columns: 1fr; }
+  .nav-links { display: none; }
+  .section { padding: 60px 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav class="nav">
+  <div class="nav-brand">
+    <span class="brand-dot dot-orange"></span>
+    <span>虾团队 · 爬虫助手</span>
+    <span class="brand-dot dot-teal"></span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#overview">概览</a></li>
+    <li><a href="#mode">工作模式</a></li>
+    <li><a href="#eval">评估体系</a></li>
+    <li><a href="#tech">技术栈</a></li>
+    <li><a href="#install">安装</a></li>
+  </ul>
+</nav>
+
+<!-- ====== V: 视觉钩子 ====== -->
+<section class="hero">
+  <div class="hero-badge">
+    <span class="pulse-dot"></span>
+    AI 信息查找工具 · v3.2.3
+  </div>
+  <h1>爬虫助手</h1>
+  <p class="hero-tagline">
+    不是爬虫工具。<br/>
+    你提需求，它自己去搜索引擎找、爬取页面、评估可信度、交叉验证，<br/>
+    最终给你一个带置信度分数和来源引用的结论。
+  </p>
+
+  <div class="hero-kpi">
+    <div class="hero-kpi-item">
+      <div class="num">3层</div>
+      <div class="label">信息可信度<br/>评估体系</div>
+    </div>
+    <div class="hero-kpi-item">
+      <div class="num">2种</div>
+      <div class="label">半自动 / 全自动<br/>工作模式</div>
+    </div>
+    <div class="hero-kpi-item">
+      <div class="num">~36s</div>
+      <div class="label">L2 标准评估<br/>默认耗时</div>
+    </div>
+    <div class="hero-kpi-item">
+      <div class="num">4种</div>
+      <div class="label">爬取引擎<br/>适配不同场景</div>
+    </div>
+  </div>
+
+  <div class="hero-card">
+    <div class="card-icon">🕷️</div>
+    <div class="card-title">爬虫助手 · Scrapling Agent v3.2.3</div>
+    <div class="card-sub">自动查找信息，三层置信度评估，半自动/全自动切换。适用于 OpenClaw / CodeFlicker / Claude Code / Cursor 等所有支持 Skill 的 AI 平台。</div>
+  </div>
+
+  <div class="scroll-hint">
+    <span>↓</span>
+    <span>向下滚动</span>
+  </div>
+</section>
+
+<!-- ====== I: 信息骨架 ====== -->
+<section class="section" id="overview">
+  <div class="section-header fade-in">
+    <div class="section-tag">INFORMATION SKELETON</div>
+    <h2>一句话说清楚</h2>
+    <p>你不用告诉我具体爬哪个页面，只说你要查什么就行。</p>
+  </div>
+
+  <div class="card-grid card-grid-3" style="margin-bottom: 40px;">
+    <div class="card fade-in" style="text-align: center;">
+      <div class="card-icon-lg">🔍</div>
+      <h3>自动搜索</h3>
+      <p>根据关键词自动检索目标来源，定位相关页面，不需要你提供任何 URL。</p>
+    </div>
+    <div class="card fade-in" style="text-align: center;">
+      <div class="card-icon-lg">📊</div>
+      <h3>可信度评分</h3>
+      <p>每条结果带综合置信度分数和三级评估明细。来源 30% + 内容 40% + 共识 30%。</p>
+    </div>
+    <div class="card fade-in" style="text-align: center;">
+      <div class="card-icon-lg">📝</div>
+      <h3>完整引用</h3>
+      <p>每条结论附带来源链接、作者、日期、置信度明细。末尾附完整引用附录，可追溯可验证。</p>
+    </div>
+  </div>
+
+  <!-- 触发场景 -->
+  <div class="fade-in">
+    <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 14px; text-align: center;">一句话触发，自动匹配深度</h3>
+    <table class="scenario-table">
+      <thead>
+        <tr>
+          <th>你说的话</th>
+          <th>默认评估</th>
+          <th>模式</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>"帮我调研一下XX竞品"</td><td>L3 深度</td><td>半自动</td></tr>
+        <tr><td>"帮我查一下XX行业动态"</td><td>L2 标准</td><td>半自动</td></tr>
+        <tr><td>"搜集一下XX的方法"</td><td>L2 标准</td><td>半自动</td></tr>
+        <tr><td>"随便看看XX最新消息"</td><td>L1 快速</td><td>半自动</td></tr>
+        <tr><td>"深度分析一下XX"</td><td>L3 深度</td><td>半自动</td></tr>
+        <tr><td>"帮我找找关于XX的资料"</td><td>L2 标准</td><td>半自动</td></tr>
+      </tbody>
+    </table>
+    <p style="text-align: center; font-size: 0.8rem; color: var(--text-muted); margin-top: 8px;">💡 说"快速看看"强制 L1，"深度查"强制 L3，"全自动开搞"切换全自动模式</p>
+  </div>
+</section>
+
+<!-- ====== S: 工作模式 ====== -->
+<section class="section" id="mode">
+  <div class="section-header fade-in">
+    <div class="section-tag">WORK MODE</div>
+    <h2>两种工作模式</h2>
+    <p>半自动保安全，全自动提速度，随需切换。</p>
+  </div>
+
+  <div class="mode-compare" style="margin-bottom: 48px;">
+    <div class="mode-card default">
+      <div class="mode-icon">🛑</div>
+      <div class="mode-name">半自动（默认）</div>
+      <div class="mode-tag">推荐 · 默认</div>
+      <p>先给出执行计划（包含三级效果展示 + 预估产出）→ 你确认后 → 才真正执行。适合新需求、不确定要什么的时候。</p>
+    </div>
+    <div class="mode-card auto">
+      <div class="mode-icon">🚀</div>
+      <div class="mode-name">全自动</div>
+      <div class="mode-tag">快捷 · 信任</div>
+      <p>直接执行 → 出最终结果（含所有标注）。适合你清楚要什么、信任结果的时候。</p>
+    </div>
+  </div>
+
+  <div class="callout" style="max-width: 700px; margin: 0 auto;">
+    <strong>💡 半自动流程示例：</strong><br/>
+    你说"帮我查社群活跃度提升方法"<br/>
+    我出计划：搜什么、爬多少、L1/L2/L3 三级效果对比、预估产出长什么样<br/>
+    你确认 → 我执行 → 出最终结果
+  </div>
+</section>
+
+<!-- ====== S: 评估体系 ====== -->
+<section class="section" id="eval">
+  <div class="section-header fade-in">
+    <div class="section-tag">CONFIDENCE RATING</div>
+    <h2>三层置信度评估体系</h2>
+    <p>不同价值的场景用不同深度，不浪费你的时间。</p>
+  </div>
+
+  <!-- 公式 -->
+  <div class="fade-in" style="text-align: center; margin-bottom: 40px;">
+    <div style="display: inline-block; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 24px 40px;">
+      <div style="font-size: 1.2rem; font-weight: 700; color: var(--accent2); margin-bottom: 6px;">可信度 = 来源评估 (30%) × 内容评估 (40%) × 共识验证 (30%)</div>
+      <div style="font-size: 0.82rem; color: var(--text-dim);">内容权重最高 · 有数据的博客比空话的官网更可信</div>
+    </div>
+  </div>
+
+  <!-- 三层卡片 -->
+  <div class="confidence-grid">
+    <div class="conf-card fade-in">
+      <div class="conf-label">第一层 · 来源评估</div>
+      <div class="conf-value" style="color: var(--yellow);">域名信誉 + 作者 + 平台</div>
+      <div class="conf-sub">爬之前判断 → 决定爬不爬</div>
+      <div class="conf-bar" style="width: 60%;"></div>
+    </div>
+    <div class="conf-card fade-in">
+      <div class="conf-label">第二层 · 内容评估</div>
+      <div class="conf-value" style="color: var(--accent2);">信息密度 + 证据 + 时效</div>
+      <div class="conf-sub">爬之后判断 → 权重最高 40%</div>
+      <div class="conf-bar" style="width: 80%;"></div>
+    </div>
+    <div class="conf-card fade-in">
+      <div class="conf-label">第三层 · 共识验证</div>
+      <div class="conf-value" style="color: var(--accent3);">多源交叉验证</div>
+      <div class="conf-sub">多条独立来源一致 → 加分</div>
+      <div class="conf-bar" style="width: 60%;"></div>
+    </div>
+  </div>
+
+  <!-- 按价值自适应评估等级 -->
+  <div class="fade-in" style="margin-bottom: 40px;">
+    <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 16px; text-align: center;">按价值自适应评估等级</h3>
+    <div class="feature-row">
+      <div class="feature-card l1">
+        <div class="fc-badge">L1·快速</div>
+        <div class="fc-title">只看来源</div>
+        <div class="fc-time">~28 秒</div>
+        <ul>
+          <li>只评估来源域名和作者</li>
+          <li>不做内容验证</li>
+          <li>可靠度：🟠 仅参考方向</li>
+          <li>适合「随意浏览」的场景</li>
+        </ul>
+      </div>
+      <div class="feature-card l2">
+        <div class="fc-badge">L2·标准 ✅ 默认</div>
+        <div class="fc-title">来源 + 内容</div>
+        <div class="fc-time">~36 秒</div>
+        <ul>
+          <li>评估来源 + 爬取内容质量</li>
+          <li>剔除空洞文章</li>
+          <li>可靠度：🟢 有参考价值</li>
+          <li>适合「方向参考」的场景</li>
+        </ul>
+      </div>
+      <div class="feature-card l3">
+        <div class="fc-badge">L3·深度</div>
+        <div class="fc-title">全三层交叉验证</div>
+        <div class="fc-time">~46 秒</div>
+        <ul>
+          <li>多源交叉对比消除偏见</li>
+          <li>发现矛盾会标红提示</li>
+          <li>可靠度：🔵 可作决策依据</li>
+          <li>适合「决策分析」的场景</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout purple">
+      <strong>💡 智能升级/降级：</strong>
+      来源分低但内容好 → 自动升级到 L3 加共识验证。<br/>
+      所有来源都很权威 → 可降级跳过重复验证。<br/>
+      发现矛盾信息 → 强制 L3 必须交叉验证。
+    </div>
+  </div>
+
+  <!-- 综合等级 -->
+  <div class="fade-in">
+    <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 14px; text-align: center;">综合等级对照</h3>
+    <table class="level-table">
+      <thead>
+        <tr><th>综合分</th><th>等级</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>≥ 8.5</td><td><span class="score-dot s5"></span>⭐⭐⭐⭐⭐</td><td style="color: var(--accent3);">可作为决策依据</td></tr>
+        <tr><td>7.0~8.4</td><td><span class="score-dot s4"></span>⭐⭐⭐⭐</td><td style="color: var(--green);">有参考价值</td></tr>
+        <tr><td>5.5~6.9</td><td><span class="score-dot s3"></span>⭐⭐⭐</td><td style="color: var(--yellow);">可参考方向</td></tr>
+        <tr><td>3.5~5.4</td><td><span class="score-dot s2"></span>⭐⭐</td><td style="color: var(--orange);">仅参考</td></tr>
+        <tr><td>&lt; 3.5</td><td><span class="score-dot s1"></span>⭐</td><td style="color: var(--red);">不可用</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ====== T: 技术栈 ====== -->
+<section class="section" id="tech">
+  <div class="section-header fade-in">
+    <div class="section-tag">TECH STACK</div>
+    <h2>背后技术栈</h2>
+    <p>基于 Scrapling 自适应爬虫库构建，GitHub 近 9K Stars。</p>
+  </div>
+
+  <div class="card-grid card-grid-3">
+    <div class="card fade-in">
+      <h3>🔍 搜索引擎</h3>
+      <p>先找到信息在哪儿。基于关键词自动检索多个搜索引擎，定位目标页面。</p>
+    </div>
+    <div class="card fade-in">
+      <h3>🕸️ Scrapling Fetcher</h3>
+      <p>普通页面抓取。快速获取页面内容，处理标准 HTML 页面。</p>
+    </div>
+    <div class="card fade-in">
+      <h3>🛡️ StealthyFetcher</h3>
+      <p>处理有 Cloudflare 反爬机制的页面。模拟真实浏览器行为。</p>
+    </div>
+    <div class="card fade-in">
+      <h3>⚡ DynamicFetcher</h3>
+      <p>需要 JS 渲染的动态页面。执行 JavaScript 后再提取内容。</p>
+    </div>
+    <div class="card fade-in">
+      <h3>📊 置信度算法</h3>
+      <p>三层加权评分体系。来源30% + 内容40% + 共识30%，内容权重最高。</p>
+    </div>
+    <div class="card fade-in">
+      <h3>📝 输出格式化</h3>
+      <p>每条结果带来源链接、置信度分数、评估明细。末尾附完整引用附录。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== A: 安装教程 ====== -->
+<section class="section" id="install">
+  <div class="section-header fade-in">
+    <div class="section-tag">INSTALLATION</div>
+    <h2>安装教程</h2>
+    <p>通用安装方式，适配主流 AI Agent 平台。</p>
+  </div>
+
+  <div class="install-grid">
+    <div class="install-card fade-in">
+      <div class="inst-icon">🧩</div>
+      <h4>CodeFlicker / MyFlicker</h4>
+      <p class="inst-desc">从内网 SkillHub 安装，直接粘贴链接自动下载。</p>
+      <pre><span class="cmd-comment"># 在对话中说：</span>
+"帮我安装这个 skill：
+https://myflicker.corp.kuaishou.com
+/skillhub/skills/scrapling-agent"</pre>
+      <p class="inst-desc" style="margin-top:10px;">或者直接搜索：</p>
+      <pre>"帮我找一个叫 scrapling-agent<br/>的信息查找 skill 并安装"</pre>
+    </div>
+
+    <div class="install-card fade-in">
+      <div class="inst-icon">📁</div>
+      <h4>手动部署</h4>
+      <p class="inst-desc">将 skill 目录复制到对应平台的 Skills 路径。</p>
+      <pre><span class="cmd-comment"># OpenClaw</span>
+~/.openclaw/skills/
+
+<span class="cmd-comment"># CodeFlicker</span>
+~/.codeflicker/skills/
+
+<span class="cmd-comment"># Claude Code</span>
+~/.claude/skills/
+
+<span class="cmd-comment"># Cursor</span>
+.cursor/skills/</pre>
+    </div>
+
+    <div class="install-card fade-in">
+      <div class="inst-icon">📦</div>
+      <h4>依赖安装</h4>
+      <p class="inst-desc">如需手动安装 Scrapling 爬虫依赖库。</p>
+      <pre>pip install scrapling
+
+<span class="cmd-comment"># 验证安装</span>
+python3 -c "import scrapling;<br/>print(scrapling.__version__)"
+
+<span class="cmd-comment"># 浏览器渲染（可选）</span>
+pip install playwright
+playwright install chromium</pre>
+    </div>
+
+    <div class="install-card fade-in">
+      <div class="inst-icon">📝</div>
+      <h4>手动注册</h4>
+      <p class="inst-desc">在任何支持 Skill 的 AI 平台中注册。</p>
+      <pre>name: scrapling-agent
+description: 自动查找信息。
+  你只需说需求，不用指
+  定具体页面。
+version: 3.2.3
+
+触发：
+- "调研XX竞品" → L3
+- "查XX行业" → L2
+- "搜集XX方法" → L2
+- "深度分析XX" → L3
+
+模式：半自动(默认)/全自动
+评估：来源30%+内容40%+共识30%</pre>
+    </div>
+  </div>
+
+  <div class="callout" style="max-width: 600px; margin: 24px auto 0;">
+    <strong>💡 首次使用默认半自动</strong><br/>
+    AI 先给执行计划等你确认再开始跑。跑熟了直接说"全自动开搞"切换。
+  </div>
+</section>
+
+<!-- ====== A: 下载 ====== -->
+<section class="section" id="download">
+  <div class="section-header fade-in">
+    <div class="section-tag">DOWNLOAD</div>
+    <h2>下载爬虫助手</h2>
+    <p>免费下载，开箱即用。支持所有主流 AI Agent 平台。</p>
+  </div>
+
+  <div class="card-grid card-grid-2" style="max-width: 700px; margin: 0 auto;">
+    <div class="card fade-in" style="text-align: center; padding: 40px 28px;">
+      <div style="font-size: 48px; margin-bottom: 16px;">📦</div>
+      <h3>下载 Skill 压缩包</h3>
+      <div class="card-meta" style="margin-bottom: 16px;">Scrapling Agent v3.2.3 · ZIP 格式</div>
+      <p style="margin-bottom: 20px;">包含完整 SKILL.md、置信度评估方案、技术方案可视化页面、核心爬取脚本。</p>
+      <a href="scrapling-agent-skill.zip" download
+         style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 28px; background: linear-gradient(135deg, var(--accent1), var(--accent2)); color: #fff; border-radius: 100px; font-size: 14px; font-weight: 700; text-decoration: none;">
+        ⬇ 下载 ZIP
+      </a>
+    </div>
+    <div class="card fade-in" style="text-align: center; padding: 40px 28px;">
+      <div style="font-size: 48px; margin-bottom: 16px;">🐙</div>
+      <h3>GitHub 仓库</h3>
+      <div class="card-meta" style="margin-bottom: 16px;">开源 · 可 Fork · 可提交 Issue</div>
+      <p style="margin-bottom: 20px;">在 GitHub 上查看完整的 Skill 代码、提交反馈、参与改进。欢迎 Star 🌟</p>
+      <a href="https://github.com/jiangjincai85-sys/scrapling-agent" target="_blank" rel="noopener"
+         style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 28px; background: var(--surface); border: 1px solid var(--border); color: var(--text); border-radius: 100px; font-size: 14px; font-weight: 600; text-decoration: none;">
+        🐙 查看 GitHub
+      </a>
+    </div>
+  </div>
+
+  <div class="callout" style="max-width: 600px; margin: 24px auto 0;">
+    <strong>📌 快速安装：</strong><br/>
+    下载 ZIP 后解压到对应的 Skills 目录即可使用。支持 OpenClaw、CodeFlicker、Claude Code、Cursor 等平台。<br/>
+    详细说明请参考上方「安装教程」板块。
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-links">
+    <span>爬虫助手 · Scrapling Agent v3.2.3</span>
+    <span>·</span>
+    <span>虾团队出品</span>
+  </div>
+  <p>支持 OpenClaw / CodeFlicker / Claude Code / Cursor 等 AI Agent 平台</p>
+</footer>
+
+<script>
+// 淡入动画
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
