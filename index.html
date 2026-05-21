@@ -287,7 +287,37 @@ body {
   .install-grid { grid-template-columns: 1fr; }
   .nav-links { display: none; }
   .section { padding: 60px 16px; }
+  .case-table-row { flex-wrap: wrap; }
 }
+
+/* Case Studies */
+.case-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; transition: all 0.3s ease; }
+.case-card:hover { transform: translateY(-3px); border-color: rgba(255,255,255,0.06); }
+.case-header { display: flex; align-items: center; justify-content: space-between; padding: 18px 24px; border-bottom: 1px solid var(--border); gap: 12px; flex-wrap: wrap; }
+.case-role { display: flex; align-items: center; gap: 10px; }
+.case-role-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 100px; font-size: 12px; font-weight: 600; }
+.case-role-badge.user { background: rgba(0,201,219,0.1); color: var(--accent2); border: 1px solid rgba(0,201,219,0.15); }
+.case-query { font-size: 0.88rem; font-weight: 600; color: var(--text); }
+.case-level { display: inline-flex; align-items: center; gap: 4px; padding: 4px 14px; border-radius: 100px; font-size: 11px; font-weight: 700; background: rgba(167,139,250,0.1); color: var(--accent3); border: 1px solid rgba(167,139,250,0.15); white-space: nowrap; }
+.case-body { padding: 20px 24px; }
+.case-step-row { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 14px; }
+.case-step-arrow { font-size: 22px; flex-shrink: 0; width: 36px; text-align: center; }
+.case-step-content { flex: 1; }
+.case-step-label { font-size: 0.84rem; font-weight: 700; color: var(--text); }
+.case-step-desc { font-size: 0.8rem; color: var(--text-dim); line-height: 1.5; }
+.case-output { margin: 18px 0 14px; background: rgba(0,0,0,0.25); border: 1px solid rgba(42,42,74,0.4); border-radius: var(--radius-sm); overflow: hidden; }
+.case-output-title { padding: 10px 14px; font-size: 0.78rem; color: var(--text-muted); border-bottom: 1px solid rgba(42,42,74,0.4); letter-spacing: 0.5px; }
+.case-table-row { display: flex; padding: 10px 14px; border-bottom: 1px solid rgba(42,42,74,0.25); font-size: 0.78rem; color: var(--text-dim); gap: 8px; align-items: center; }
+.case-table-header { background: rgba(255,255,255,0.02); font-weight: 600; color: var(--text-muted); font-size: 0.72rem; letter-spacing: 0.5px; }
+.case-value { font-size: 0.82rem; color: var(--text-dim); line-height: 1.6; padding: 12px 16px; background: rgba(34,197,94,0.06); border: 1px solid rgba(34,197,94,0.12); border-radius: var(--radius-xs); }
+.case-value strong { color: var(--green); }
+.score-badge { display: inline-block; padding: 1px 8px; border-radius: 100px; font-size: 11px; font-weight: 700; }
+.score-badge.s5 { background: rgba(167,139,250,0.15); color: var(--accent3); }
+.score-badge.s4 { background: rgba(34,197,94,0.15); color: var(--green); }
+.score-badge.s3 { background: rgba(234,179,8,0.15); color: var(--yellow); }
+.score-badge.s2 { background: rgba(249,115,22,0.15); color: var(--orange); }
+.tag-data { display: inline-block; padding: 1px 8px; border-radius: 100px; font-size: 10px; font-weight: 600; background: rgba(34,197,94,0.1); color: var(--green); }
+.tag-opinion { display: inline-block; padding: 1px 8px; border-radius: 100px; font-size: 10px; font-weight: 600; background: rgba(234,179,8,0.1); color: var(--yellow); }
 </style>
 </head>
 <body>
@@ -305,6 +335,7 @@ body {
     <li><a href="#eval">评估体系</a></li>
     <li><a href="#tech">技术栈</a></li>
     <li><a href="#install">安装</a></li>
+    <li><a href="#cases">案例</a></li>
   </ul>
 </nav>
 
@@ -686,6 +717,236 @@ version: 3.2.3
     <strong>📌 快速安装：</strong><br/>
     下载 ZIP 后解压到对应的 Skills 目录即可使用。支持 OpenClaw、CodeFlicker、Claude Code、Cursor 等平台。<br/>
     详细说明请参考上方「安装教程」板块。
+  </div>
+</section>
+
+<!-- ====== 案例展示 ====== -->
+<section class="section" id="cases">
+  <div class="section-header fade-in">
+    <div class="section-tag">CASE STUDIES</div>
+    <h2>真实案例 · 一看就懂</h2>
+    <p>不用管它怎么实现的，看看它能帮你做什么。</p>
+  </div>
+
+  <!-- Case 1 -->
+  <div class="case-card fade-in" style="margin-bottom: 28px;">
+    <div class="case-header">
+      <div class="case-role">
+        <span class="case-role-badge user">👤 你说</span>
+        <span class="case-query">"帮我调研一下飞书的竞品动态"</span>
+      </div>
+      <div class="case-level">L3 ⭐⭐⭐⭐⭐ 深度</div>
+    </div>
+    <div class="case-body">
+      <div class="case-step-row">
+        <div class="case-step-arrow">🕷️</div>
+        <div class="case-step-content">
+          <div class="case-step-label">第一步：自动搜索</div>
+          <div class="case-step-desc">自动搜索，定位到 36氪、爱分析、人人都是产品经理等平台的 5 篇相关文章</div>
+        </div>
+      </div>
+      <div class="case-step-row">
+        <div class="case-step-arrow">📊</div>
+        <div class="case-step-content">
+          <div class="case-step-label">第二步：单篇评估</div>
+          <div class="case-step-desc">逐篇爬取内容，做来源评估 + 内容质量评估（信息密度、证据强度、时效性）</div>
+        </div>
+      </div>
+      <div class="case-step-row">
+        <div class="case-step-arrow">🔗</div>
+        <div class="case-step-content">
+          <div class="case-step-label">第三步：交叉验证</div>
+          <div class="case-step-desc">发现 3 条独立来源都提到同一趋势 → 共识加分；发现 1 条矛盾信息 → 标红提示</div>
+        </div>
+      </div>
+
+      <div class="case-output">
+        <div class="case-output-title">📋 最终输出（部分）</div>
+        <div class="case-table-row case-table-header">
+          <div style="flex: 2;">发现</div>
+          <div style="flex: 3;">来源</div>
+          <div style="flex: 0.7; text-align: center;">置信度</div>
+        </div>
+        <div class="case-table-row">
+          <div style="flex: 2;">飞书瞄向海外市场，推出"Feishu"国际版</div>
+          <div style="flex: 3;">36氪｜作者署名｜2026-04</div>
+          <div style="flex: 0.7; text-align: center;"><span class="score-badge">9.2</span></div>
+        </div>
+        <div class="case-table-row">
+          <div style="flex: 2;">AI 助手升级，支持自动议程总结</div>
+          <div style="flex: 3;">爱分析行业报告｜2026-03</div>
+          <div style="flex: 0.7; text-align: center;"><span class="score-badge">8.1</span></div>
+        </div>
+        <div class="case-table-row">
+          <div style="flex: 2;">中小企业用户流失率上升 12%</div>
+          <div style="flex: 3;">知乎专栏｜个人作者｜2026-05</div>
+          <div style="flex: 0.7; text-align: center;"><span class="score-badge">6.5</span></div>
+        </div>
+        <div class="case-table-row" style="border-bottom: none;">
+          <div style="flex: 2;"><span style="color: var(--red);">⚠️ 存在矛盾：另一来源称流失率下降 5%</span></div>
+          <div style="flex: 3;">某数据分析博客｜2026-04</div>
+          <div style="flex: 0.7; text-align: center;"><span class="score-badge" style="background: rgba(239,68,68,0.2); color: var(--red);">4.8</span></div>
+        </div>
+      </div>
+
+      <div class="case-value">
+        <strong>实际价值：</strong>不用自己搜 5 个网站逐个看，一条指令拿到跨平台汇总 + 可信度评分 + 矛盾提示，几分钟搞定过去一小时的工作
+      </div>
+    </div>
+  </div>
+
+  <!-- Case 2 -->
+  <div class="case-card fade-in" style="margin-bottom: 28px;">
+    <div class="case-header">
+      <div class="case-role">
+        <span class="case-role-badge user">👤 你说</span>
+        <span class="case-query">"搜集一下提升社群活跃度的有效方法"</span>
+      </div>
+      <div class="case-level">L2 ⭐⭐⭐⭐ 标准</div>
+    </div>
+    <div class="case-body">
+      <div class="case-step-row">
+        <div class="case-step-arrow">🕷️</div>
+        <div class="case-step-content">
+          <div class="case-step-label">自动搜索+爬取</div>
+          <div class="case-step-desc">搜到 6 篇文章，自动判断哪些有实际数据支撑、哪些只是空泛经验分享</div>
+        </div>
+      </div>
+
+      <div class="case-output">
+        <div class="case-output-title">📋 最终输出（部分）</div>
+        <div class="case-table-row case-table-header">
+          <div style="flex: 4;">方法</div>
+          <div style="flex: 1.5;">类型</div>
+          <div style="flex: 2;">来源平台</div>
+          <div style="flex: 0.7; text-align: center;">可信度</div>
+        </div>
+        <div class="case-table-row">
+          <div style="flex: 4;">7 天签到打卡 + 积分兑换</div>
+          <div style="flex: 1.5;"><span class="tag-data">📊 有数据</span></div>
+          <div style="flex: 2;">运营深度精选</div>
+          <div style="flex: 0.7; text-align: center;"><span class="score-badge">7.8</span></div>
+        </div>
+        <div class="case-table-row">
+          <div style="flex: 4;">每周主题讨论 + 精华整理</div>
+          <div style="flex: 1.5;"><span class="tag-data">📊 有数据</span></div>
+          <div style="flex: 2;">人人都是产品经理</div>
+          <div style="flex: 0.7; text-align: center;"><span class="score-badge">7.5</span></div>
+        </div>
+        <div class="case-table-row">
+          <div style="flex: 4;">引入 KOL 做定期分享</div>
+          <div style="flex: 1.5;"><span class="tag-opinion">💬 纯经验</span></div>
+          <div style="flex: 2;">知乎专栏</div>
+          <div style="flex: 0.7; text-align: center;"><span class="score-badge">6.0</span></div>
+        </div>
+        <div class="case-table-row" style="border-bottom: none;">
+          <div style="flex: 4;">AI 机器人自动 @ 活跃用户</div>
+          <div style="flex: 1.5;"><span class="tag-opinion">💬 纯经验</span></div>
+          <div style="flex: 2;">个人博客</div>
+          <div style="flex: 0.7; text-align: center;"><span class="score-badge">5.8</span></div>
+        </div>
+      </div>
+
+      <div class="case-value">
+        <strong>实际价值：</strong>一眼区分"有数据支撑的方法"和"纯经验分享"——不会把别人的主观建议当真理，提高信息筛选效率
+      </div>
+    </div>
+  </div>
+
+  <!-- Case 3 -->
+  <div class="case-card fade-in" style="margin-bottom: 28px;">
+    <div class="case-header">
+      <div class="case-role">
+        <span class="case-role-badge user">👤 你说</span>
+        <span class="case-query">"帮我选一下开源的 AI 编程助手，对比 Cursor、Codeium、Tabby"</span>
+      </div>
+      <div class="case-level">L3 ⭐⭐⭐⭐⭐ 深度</div>
+    </div>
+    <div class="case-body">
+      <div class="case-step-row">
+        <div class="case-step-arrow">🕷️</div>
+        <div class="case-step-content">
+          <div class="case-step-label">深度调研+交叉验证</div>
+          <div class="case-step-desc">搜官方文档 + 技术博客 + GitHub 讨论 + 社区评价，多角度评估</div>
+        </div>
+      </div>
+
+      <div class="case-output">
+        <div class="case-output-title">📋 最终输出（部分）</div>
+        <div class="case-table-row case-table-header">
+          <div style="flex: 1.5;">产品</div>
+          <div style="flex: 2.2;">核心能力</div>
+          <div style="flex: 1.8;">价格</div>
+          <div style="flex: 0.7; text-align: center;">共识度</div>
+          <div style="flex: 0.8; text-align: center;">推荐</div>
+        </div>
+        <div class="case-table-row">
+          <div style="flex: 1.5;"><strong>Cursor</strong></div>
+          <div style="flex: 2.2;">全行补全、对话式编辑、Agent 模式</div>
+          <div style="flex: 1.8;">Free / $20/月 Pro</div>
+          <div style="flex: 0.7; text-align: center;"><span class="score-badge">9.0</span></div>
+          <div style="flex: 0.8; text-align: center;">🏆 首选</div>
+        </div>
+        <div class="case-table-row">
+          <div style="flex: 1.5;"><strong>Codeium</strong></div>
+          <div style="flex: 2.2;">代码补全、搜索、Chat、个人免费</div>
+          <div style="flex: 1.8;">Freemium / $15/月</div>
+          <div style="flex: 0.7; text-align: center;"><span class="score-badge">7.8</span></div>
+          <div style="flex: 0.8; text-align: center;">👍 高性价比</div>
+        </div>
+        <div class="case-table-row" style="border-bottom: none;">
+          <div style="flex: 1.5;"><strong>Tabby</strong></div>
+          <div style="flex: 2.2;">自托管开源、支持本地 GPU</div>
+          <div style="flex: 1.8;">开源免费</div>
+          <div style="flex: 0.7; text-align: center;"><span class="score-badge">7.5</span></div>
+          <div style="flex: 0.8; text-align: center;">🔒 隐私优先</div>
+        </div>
+      </div>
+
+      <div class="case-value">
+        <strong>实际价值：</strong>不是给你一个人说的，而是聚合了 GitHub 讨论、技术博客等多方评价的共识结论——比看单一推荐文章客观得多
+      </div>
+    </div>
+  </div>
+
+  <!-- Case 4 -->
+  <div class="case-card fade-in">
+    <div class="case-header">
+      <div class="case-role">
+        <span class="case-role-badge user">👤 你说</span>
+        <span class="case-query">"全自动开搞，看看最近有什么值得关注的 SaaS 趋势"</span>
+      </div>
+      <div class="case-level" style="background: rgba(167,139,250,0.12); color: var(--accent3); border-color: rgba(167,139,250,0.2);">🚀 全自动模式</div>
+    </div>
+    <div class="case-body">
+      <div class="case-step-row">
+        <div class="case-step-arrow">🚀</div>
+        <div class="case-step-content">
+          <div class="case-step-label">全自动跳过确认，直接执行</div>
+          <div class="case-step-desc">不说"全自动"时，默认走半自动——先给计划等你确认；说"全自动"后，一路绿灯直接出结果</div>
+        </div>
+      </div>
+      <div style="margin-top: 16px; display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
+        <div style="display: flex; align-items: center; gap: 8px; background: rgba(0,201,219,0.08); border: 1px solid rgba(0,201,219,0.15); padding: 10px 16px; border-radius: 100px;">
+          <span style="font-size: 20px;">🛑</span>
+          <div>
+            <div style="font-size: 11px; color: var(--text-muted);">没有"全自动"</div>
+            <div style="font-size: 13px; font-weight: 600; color: var(--accent2);">半自动 · 先给计划等你确认</div>
+          </div>
+        </div>
+        <div style="font-size: 20px; color: var(--text-muted);">→</div>
+        <div style="display: flex; align-items: center; gap: 8px; background: rgba(167,139,250,0.08); border: 1px solid rgba(167,139,250,0.15); padding: 10px 16px; border-radius: 100px;">
+          <span style="font-size: 20px;">🚀</span>
+          <div>
+            <div style="font-size: 11px; color: var(--text-muted);">说"全自动"后</div>
+            <div style="font-size: 13px; font-weight: 600; color: var(--accent3);">直接执行 · 一路绿灯出结果</div>
+          </div>
+        </div>
+      </div>
+      <div class="case-value" style="margin-top: 16px;">
+        <strong>实际价值：</strong>新场景用半自动保安全，确认方向后再切全自动提速度——既有主动确认的安全感，又有直达结果的高效
+      </div>
+    </div>
   </div>
 </section>
 
